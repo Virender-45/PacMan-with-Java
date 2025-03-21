@@ -65,6 +65,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 this.velocityY = 0;
             }
         }
+        void reset(){
+            this.x = startX;
+            this.y = startY;
+        }
     }
 
     private int rowCount = 21;
@@ -97,7 +101,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             "XXXX XXXX XXXX XXXX",
             "OOOX X       X XOOO",
             "XXXX X XXrXX X XXXX",
-            "O       bpo       O",
+            "X       bpo       X",
             "XXXX X XXXXX X XXXX",
             "OOOX X       X XOOO",
             "XXXX X XXXXX X XXXX",
@@ -242,6 +246,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
         //Check ghost collisions
         for(Block ghost : ghosts){
+            if(collision(ghost, pacman)){
+                lives--;
+                resetPositions();
+            }
             if(ghost.y ==  tileSize*9 && ghost.direction != 'U' && ghost.direction != 'D'){
                 ghost.updateDirection('U');
             }
@@ -273,6 +281,17 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 a.x + a.width > b.x &&
                 a.y < b.y + b.height &&
                 a.y + a.height > b.y;
+    }
+
+    public void resetPositions(){
+        pacman.reset();
+        pacman.velocityX = 0;
+        pacman.velocityY = 0;
+        for(Block ghost : ghosts){
+            ghost.reset();
+            char newDirection = directions[random.nextInt(4)];
+            ghost.updateDirection(newDirection);
+        }
     }
 
     @Override

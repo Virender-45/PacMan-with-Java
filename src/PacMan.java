@@ -248,6 +248,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         for(Block ghost : ghosts){
             if(collision(ghost, pacman)){
                 lives--;
+                if(lives == 0){
+                    gameOver = true;
+                    return;
+                }
                 resetPositions();
             }
             if(ghost.y ==  tileSize*9 && ghost.direction != 'U' && ghost.direction != 'D'){
@@ -298,6 +302,9 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e){
         move();
         repaint();
+        if(gameOver){
+            gameLoop.stop();
+        }
     }
 
     @Override
